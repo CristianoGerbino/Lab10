@@ -39,6 +39,7 @@ public class PortoDAO {
 			}
 				
 		}
+			conn.close();
 			return res;
 		} catch (SQLException e) {
 			// e.printStackTrace();
@@ -68,6 +69,7 @@ public class PortoDAO {
 				Adiacenza temp = new Adiacenza(a1, a2);
 				res.add(temp);
 			}
+			conn.close();
 			return res;
 
 		} catch (SQLException e) {
@@ -132,12 +134,34 @@ public class PortoDAO {
 	}
 	
 	
-	public Paper getPaper() {//Funzione per tornare i papers per l'ultimo punto
-		final String sql = "SELECT paper.title"
-				FROM paper , creator c1, creator c2
-				WHERE paper.eprintid = c1.eprintid
-				AND c1.eprintid = c2.eprintid
-				AND c1.authorid LIKE ? AND c2.authorid LIKE ?"
+	public Paper getPaper(Author partenza, Author arrivo) {
+		final String sql = "SELECT paper.eprintid, title, issn, publication, paper.`type`, types "+
+					"FROM creator c1, creator c2, paper "+
+					"WHERE c1.eprintid = c2.eprintid AND c1.eprintid = paper.eprintid "+
+					"AND c1.authorid = ? AND c2.authorid = ?";
+		Paper paper = null;
+		try {
+			Connection conn = DBConnect.getConnection();
+			PreparedStatement st = conn.prepareStatement(sql);
+			st.setInt(1, partenza.getId());
+			st.setInt(2, arrivo.getId());
+
+			ResultSet rs = st.executeQuery();
+
+			if (rs.next()) {
+				paper = new Paper(rs.getInt("eprintid"), rs.getString("title"), rs.getString("issn"),
+						rs.getString("publication"), rs.getString("type"), rs.getString("types"));
+				
+			}
+			
+			conn.close();
+			return paper;
+
+		} catch (SQLException e) {
+			 e.printStackTrace();
+			throw new RuntimeException("Errore Db");
+		}
+		
 
 
 		

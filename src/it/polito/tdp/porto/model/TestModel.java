@@ -10,6 +10,12 @@ public class TestModel {
 			System.out.println(a.getId()+" "+a.getFirstname()+" "+a.getLastname());
 	}*/
 		model.creaGrafo();
-		System.out.format("Creato grafo con %d vertici e %d archi", model.getGrafo().vertexSet().size(), model.getGrafo().edgeSet().size());
+		System.out.format("Creato grafo con %d vertici e %d archi\n", model.getGrafo().vertexSet().size(), model.getGrafo().edgeSet().size());
+		Author source = model.getIdMap().get(33949);
+		Author dest = model.getIdMap().get(4110);
+		System.out.println("Percorso tra "+source+" a "+dest);
+		for (Paper p : model.trovaCamminoMinimo(source, dest)) {
+			System.out.println(p);
+		}
 	}
 }
