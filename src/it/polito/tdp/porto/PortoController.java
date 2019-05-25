@@ -1,6 +1,7 @@
 package it.polito.tdp.porto;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import it.polito.tdp.porto.model.Author;
@@ -73,10 +74,16 @@ public class PortoController {
     		this.txtResult.appendText("Seleziona il secondo autore!\n");
     		return;
     	}
+    	List<Paper> papers = model.trovaCamminoMinimo(source, dest);
+    	
+    	if (papers == null) {
+    		this.txtResult.appendText("Nessun percorso trovato tra "+source+" e "+dest+"\n");
+    		return;
+    	}
     	
     	this.txtResult.appendText("Sequenza di articoli tra "+source+" e "+dest+":\n");
-    	for (Paper p : model.trovaCamminoMinimo(source, dest)) {
-    		this.txtResult.appendText(p+"\n");
+    	for (Paper p : papers) {
+    		this.txtResult.appendText("-"+p+"\n");
     	}
     	
     	

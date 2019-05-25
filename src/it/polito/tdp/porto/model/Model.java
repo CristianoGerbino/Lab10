@@ -69,12 +69,19 @@ public List<Author> trovaNonVicini(Author a) {
 public List<Paper> trovaCamminoMinimo (Author partenza, Author arrivo) {
 	DijkstraShortestPath<Author, DefaultEdge> djikstra = new DijkstraShortestPath<Author, DefaultEdge>(grafo);
 	GraphPath<Author, DefaultEdge> path = djikstra.getPath(partenza, arrivo);
+	
+	if (path == null) {
+		return null;
+	}
+	
 	List<Author> vertici = path.getVertexList();
+	
 	System.out.format("Lunghezza del percorso: %d\n", vertici.size());
 	System.out.println("Autori :");
 	for (Author aut : vertici) {
 		System.out.println(aut);
 	}
+	
 	List<Paper> papers = new LinkedList<Paper>();
 	PortoDAO dao = new PortoDAO();
 	
